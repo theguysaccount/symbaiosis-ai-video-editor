@@ -79,13 +79,8 @@ jobs:
           if [ -n "$open" ]; then gh issue comment "$open" --body "$body"; else gh issue create --title "Live self-test failing" --label self-test --body "$body"; fi
       - name: Library updates waiting (for the next maintenance session; never fails)
         if: always()
-        run: |
-          for p in mediabunny @mediabunny/aac-encoder @huggingface/transformers onnxruntime-web; do
-            have=$(node -e "console.log(require('./package.json').devDependencies['$p'] || require('./node_modules/$p/package.json').version)")
-            latest=$(npm view "$p" version 2>/dev/null || echo "?")
-            if [ "$latest" != "?" ] && [ "$latest" != "$have" ]; then echo "- $p: $have in use, $latest available" >> "$GITHUB_STEP_SUMMARY"; fi
-          done
-          echo "Upgrade steps: OPERATIONS.md, \"Updating the libraries and models\"." >> "$GITHUB_STEP_SUMMARY"
+        continue-on-error: true
+        run: node scripts/check-updates.mjs >> "$GITHUB_STEP_SUMMARY" || true
 
   keepalive:
     if: github.event_name == 'schedule'
