@@ -9,9 +9,6 @@ on:
   schedule:
     - cron: "47 7 * * 3"
     - cron: "53 8 * * 6"
-    # TEMPORARY, self-limiting (22-23 November only): proves the schedule trigger fires on this
-    # account. Remove after the first scheduled run passes (OPERATIONS.md).
-    - cron: "29 */2 22,23 11 *"
   workflow_dispatch:
 
 permissions:

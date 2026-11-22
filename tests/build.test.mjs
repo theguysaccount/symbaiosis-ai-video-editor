@@ -91,6 +91,8 @@ test("guides publish on their date: none before, all after, and only published o
   const late = build("https://example.test", "2999-01-01");
   try {
     for (const g of guides) assert.ok(fs.existsSync(path.join(late.dir, "guides", g.slug, "index.html")), g.slug);
+    // The address is one setting: no page, published now or later, names a github.io host.
+    for (const f of htmlFiles(late.dir)) assert.ok(!/github\.io/.test(fs.readFileSync(f, "utf8")), path.relative(late.dir, f));
   } finally { late.cleanup(); }
   const now = build("https://example.test", today);
   try {

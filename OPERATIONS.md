@@ -47,7 +47,7 @@ None of these is needed for the site to work.
 
 ### 1. Custom domain (the "domain rollout" session handles this)
 
-Nothing in this repo changes DNS. Jack's 2026-08-30 portfolio had no domain matching this idea, so a name has to be chosen. Steps for a domain `DOMAIN`:
+Nothing in this repo changes DNS. Jack's 2026-08-30 portfolio had no domain matching this idea, and the domain rollout on 2026-11-22 found none either, so a name has to be chosen. A move loses nothing anyone made: videos never leave the device and no projects or settings are stored. The only thing kept in the browser is a cached copy of the speech model, which downloads again once at the new address. Steps for a domain `DOMAIN`:
 1. DNS at the registrar. Apex: four A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and optionally AAAA `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`; `www` CNAME `theguysaccount.github.io.`. Subdomain instead: one CNAME to `theguysaccount.github.io.`.
 2. `~/.local/bin/gh api -X PUT repos/theguysaccount/symbaiosis-ai-video-editor/pages -f cname=DOMAIN`; when the certificate is issued, `~/.local/bin/gh api -X PUT repos/theguysaccount/symbaiosis-ai-video-editor/pages -F https_enforced=true`.
 3. `~/.local/bin/gh variable set SITE_URL -R theguysaccount/symbaiosis-ai-video-editor -b https://DOMAIN`
