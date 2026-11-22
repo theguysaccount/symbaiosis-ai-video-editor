@@ -1,0 +1,33 @@
+<!--{"path":"/remove-silence-from-video/","title":"Remove silence from video, free and in your browser · Symbaiosis","description":"Cut the silent parts out of a video automatically, without uploading it. Choose tight, natural or relaxed pacing, keep any pause you want, and export MP4. Free, no watermark.","h1":"Remove silence from a video, automatically","lede":"Every pause longer than you'd like is found and shortened, not just deleted, so speech still breathes. Review the cuts in the transcript, keep any pause you want, and export. It all happens in your browser.","preset":"silence","crumb":"Remove silence","nav":"remove-silence-from-video/","dropTitle":"Drop a video and we'll find every pause","howto":{"name":"How to remove silence from a video","steps":["Open the editor and choose your video, or drop it on the page.","Wait a moment while the silences are found; every long pause appears crossed out in the transcript.","Pick tight, natural or relaxed pacing, and tap any pause you want to keep.","Choose the shape and press Export video, then download the MP4."]}}-->
+<section class="band prose">
+  <h2>How the silence cutter decides what to cut</h2>
+  <p>It measures the loudness of your audio every 10 milliseconds and learns the level of your room's background noise from the recording itself, so it works for a quiet studio and a noisy kitchen alike. Anything that stays near that background level for long enough is a pause.</p>
+  <table>
+    <thead><tr><th>Pacing</th><th>Pauses it shortens</th><th>What it leaves</th><th>Feels like</th></tr></thead>
+    <tbody>
+      <tr><td>Tight</td><td>longer than 0.35 s</td><td>0.12 s</td><td>fast short-form, TikTok style</td></tr>
+      <tr><td>Natural</td><td>longer than 0.5 s</td><td>0.2 s</td><td>most YouTube talking heads</td></tr>
+      <tr><td>Relaxed</td><td>longer than 0.8 s</td><td>0.36 s</td><td>tutorials and calm explainers</td></tr>
+    </tbody>
+  </table>
+  <p>The start and end of the video are trimmed too, so the clip begins on your first word. Cuts land in the quietest moment nearby and the sound fades over 6 milliseconds at each cut, so you won't hear clicks.</p>
+
+  <h2>Keep the pauses that matter</h2>
+  <p>A pause before a punchline or after a question is part of the delivery. Every shortened pause appears as a ⏸ chip in the transcript; tap it to keep that pause whole. Choose “Keep all” to switch the silence cutter off and only cut filler words or words you pick.</p>
+
+  <h2>Tips for a cleaner cut</h2>
+  <ul>
+    <li>Record in one take and don't stop the camera to think: the editor removes the thinking time for you.</li>
+    <li>Leave a second of silence before you start talking. It helps the detector learn your room's noise level.</li>
+    <li>Background music under speech makes pauses harder to find. Cut silence from the dry voice recording first, then add music in your main editor.</li>
+    <li>If a sentence ends too abruptly, switch from Tight to Natural rather than keeping pauses one by one.</li>
+  </ul>
+</section>
+<section class="band">
+  <h2>Questions</h2>
+  <details><summary>Does removing silence also remove “um” and “uh”?</summary><p>Yes, if “Cut filler words” is ticked (it is by default). The speech model marks hesitation sounds like “um”, “uh” and “er”, and they're cut along with the pause around them. Untick it to cut only silence.</p></details>
+  <details><summary>Will it cut quiet speech by mistake?</summary><p>It's tuned to treat anything clearly louder than the background as sound, and it never cuts a word the speech model heard. Whispered or very distant speech can still be mistaken for silence; look for a crossed-out pause where you were talking and tap it to keep it.</p></details>
+  <details><summary>Does it work on screen recordings and podcasts?</summary><p>Yes. Anything with a voice track works. For a podcast with two people, the pauses between speakers are shortened too, which tightens the conversation.</p></details>
+  <details><summary>Is my video uploaded?</summary><p>No. Everything runs in your browser and the file never leaves your device.</p></details>
+</section>
+<section class="band"><h2>Guides</h2>{{guides}}</section>

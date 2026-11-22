@@ -1,0 +1,150 @@
+<section class="tool" id="tool" data-preset="{{preset}}" aria-label="Video editor">
+  <div class="drop" id="drop">
+    <input type="file" id="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv" hidden>
+    <svg class="drop-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="10" width="36" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M21 18v12l10-6z" fill="currentColor"/></svg>
+    <p class="drop-title">{{dropTitle}}</p>
+    <div class="drop-cta">
+      <button class="btn primary big" type="button" id="pick">Choose a video</button>
+      <button class="btn ghost" type="button" id="sample">Try the sample clip</button>
+    </div>
+    <p class="drop-sub">or drop a file here · MP4, MOV or WebM · it stays on your device</p>
+    <label class="lang">Spoken language
+      <select id="language">
+        <option value="en" selected>English (fastest)</option>
+        <option value="es">Spanish</option><option value="fr">French</option><option value="de">German</option>
+        <option value="pt">Portuguese</option><option value="it">Italian</option><option value="nl">Dutch</option>
+        <option value="pl">Polish</option><option value="tr">Turkish</option><option value="ru">Russian</option>
+        <option value="uk">Ukrainian</option><option value="sv">Swedish</option><option value="id">Indonesian</option>
+        <option value="vi">Vietnamese</option><option value="hi">Hindi</option><option value="ja">Japanese</option>
+        <option value="ko">Korean</option><option value="zh">Chinese</option><option value="ar">Arabic</option>
+      </select>
+    </label>
+    <p class="note" id="unsupported" hidden>This browser can't edit video yet: it lacks WebCodecs. Use a recent Chrome or Edge, Safari 26 or later, or Firefox 130 or later on a computer.</p>
+  </div>
+
+  <div class="work" id="work" hidden>
+    <div class="stage">
+      <div class="frame" id="frame">
+        <canvas id="preview" width="540" height="960" aria-label="Preview of the edited video"></canvas>
+        <video id="video" playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+      </div>
+      <div class="transport">
+        <button class="btn icon" type="button" id="play" aria-label="Play the edit">▶</button>
+        <input type="range" id="scrub" min="0" max="1000" value="0" step="1" aria-label="Position in the edited video">
+        <span class="clock" id="clock">0:00 / 0:00</span>
+      </div>
+      <p class="stats" id="stats" aria-live="polite"></p>
+    </div>
+
+    <div class="panel">
+      <div class="status" role="status" aria-live="polite">
+        <p id="status">Reading the video…</p>
+        <progress id="progress" max="1" value="0"></progress>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tab-edit" aria-selected="true" aria-controls="pane-edit">Cut</button>
+        <button type="button" role="tab" id="tab-captions" aria-selected="false" aria-controls="pane-captions">Captions</button>
+        <button type="button" role="tab" id="tab-format" aria-selected="false" aria-controls="pane-format">Format</button>
+      </div>
+
+      <form id="settings" autocomplete="off">
+        <div class="pane" role="tabpanel" id="pane-edit" aria-labelledby="tab-edit">
+          <fieldset class="seg">
+            <legend>Pauses</legend>
+            <label><input type="radio" name="pacing" value="tight"> Tight</label>
+            <label><input type="radio" name="pacing" value="natural" checked> Natural</label>
+            <label><input type="radio" name="pacing" value="relaxed"> Relaxed</label>
+            <label><input type="radio" name="pacing" value="off"> Keep all</label>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="fillers" checked> Cut filler words (um, uh, er)</label>
+          <label class="check"><input type="checkbox" name="sounds"> Cut sounds with no words (breaths, clicks)</label>
+          <div class="transcript-head">
+            <h3>Transcript</h3>
+            <div class="word-tools" id="word-tools">
+              <button class="btn small" type="button" id="cut-sel" disabled>Cut</button>
+              <button class="btn small" type="button" id="keep-sel" disabled>Keep</button>
+              <button class="btn small" type="button" id="edit-sel" disabled>Fix text</button>
+              <button class="btn small ghost" type="button" id="undo" disabled>Undo</button>
+            </div>
+          </div>
+          <p class="hint">Tap a word to select it (shift-tap or drag for several), then cut or keep it. Crossed-out parts are removed. Tap a ⏸ pause to keep it.</p>
+          <div class="transcript" id="transcript" aria-label="Transcript: select words to cut or keep"></div>
+        </div>
+
+        <div class="pane" role="tabpanel" id="pane-captions" aria-labelledby="tab-captions" hidden>
+          <label class="check"><input type="checkbox" name="captions" checked> Burn captions into the video</label>
+          <fieldset class="seg"><legend>Style</legend>
+            <label><input type="radio" name="style" value="pop" checked> Bold pop</label>
+            <label><input type="radio" name="style" value="box"> Boxed</label>
+            <label><input type="radio" name="style" value="clean"> Clean</label>
+          </fieldset>
+          <fieldset class="seg"><legend>Position</legend>
+            <label><input type="radio" name="position" value="top"> Top</label>
+            <label><input type="radio" name="position" value="middle"> Middle</label>
+            <label><input type="radio" name="position" value="lower" checked> Lower</label>
+          </fieldset>
+          <fieldset class="seg"><legend>Size</legend>
+            <label><input type="radio" name="size" value="s"> S</label>
+            <label><input type="radio" name="size" value="m" checked> M</label>
+            <label><input type="radio" name="size" value="l"> L</label>
+          </fieldset>
+          <fieldset class="seg"><legend>Words on screen</legend>
+            <label><input type="radio" name="words" value="1"> 1</label>
+            <label><input type="radio" name="words" value="3" checked> Up to 3</label>
+            <label><input type="radio" name="words" value="6"> Up to 6</label>
+          </fieldset>
+          <fieldset class="seg swatches"><legend>Highlight</legend>
+            <label><input type="radio" name="highlight" value="yellow" checked><span class="sw sw-yellow">Yellow</span></label>
+            <label><input type="radio" name="highlight" value="green"><span class="sw sw-green">Green</span></label>
+            <label><input type="radio" name="highlight" value="cyan"><span class="sw sw-cyan">Cyan</span></label>
+            <label><input type="radio" name="highlight" value="pink"><span class="sw sw-pink">Pink</span></label>
+            <label><input type="radio" name="highlight" value="none"><span class="sw sw-none">None</span></label>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="upper" checked> UPPERCASE</label>
+          <label class="check"><input type="checkbox" name="nopunct" checked> Hide commas and full stops</label>
+        </div>
+
+        <div class="pane" role="tabpanel" id="pane-format" aria-labelledby="tab-format" hidden>
+          <fieldset class="seg"><legend>Shape</legend>
+            <label><input type="radio" name="format" value="9:16" checked> 9:16</label>
+            <label><input type="radio" name="format" value="4:5"> 4:5</label>
+            <label><input type="radio" name="format" value="1:1"> 1:1</label>
+            <label><input type="radio" name="format" value="original"> Original</label>
+          </fieldset>
+          <fieldset class="seg" id="fit-row"><legend>Framing</legend>
+            <label><input type="radio" name="fit" value="fill" checked> Fill (crop)</label>
+            <label><input type="radio" name="fit" value="blur"> Fit, blurred edges</label>
+          </fieldset>
+          <label class="range" id="focus-row">Crop position <input type="range" name="focus" min="0" max="100" value="50"></label>
+          <label class="check"><input type="checkbox" name="punch"> Punch-in zoom on every other cut (hides jump cuts)</label>
+          <fieldset class="seg"><legend>Quality</legend>
+            <label><input type="radio" name="quality" value="1080" checked> 1080p</label>
+            <label><input type="radio" name="quality" value="720"> 720p (faster)</label>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="endcard"> Add a 1.5 s “Edited with Symbaiosis” end card</label>
+        </div>
+      </form>
+
+      <div class="actions">
+        <button class="btn primary big" type="button" id="export" disabled>Export video</button>
+        <button class="btn ghost" type="button" id="cancel" hidden>Cancel</button>
+        <button class="btn ghost" type="button" id="restart">Start over</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result" id="result" hidden>
+    <h2>Your edit is ready</h2>
+    <div class="result-grid">
+      <video id="out" controls playsinline></video>
+      <div>
+        <p class="result-meta" id="result-meta"></p>
+        <p><a class="btn primary big" id="download" href="#" download>Download video</a></p>
+        <p class="files"><a id="srt" href="#" download>Captions (.srt)</a> · <a id="vtt" href="#" download>Captions (.vtt)</a> · <button class="linklike" type="button" id="copy">Copy transcript</button></p>
+        <p class="note">Made on this device. Nothing was uploaded, and nothing is kept after you close the tab.</p>
+        <p><button class="btn ghost" type="button" id="back">Back to the edit</button> <button class="btn ghost" type="button" id="share">Share this free tool</button></p>
+      </div>
+    </div>
+  </div>
+</section>

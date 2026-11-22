@@ -1,0 +1,24 @@
+<!--{"path":"/remove-filler-words/","title":"Remove um and uh from a video automatically · Symbaiosis","description":"Find and cut filler words like um, uh and er from a video with an on-device speech model. Review each cut in the transcript, keep any you want, export MP4. Free, private, no upload.","h1":"Remove “um” and “uh” from your video","lede":"The speech model marks every hesitation sound in your recording and cuts it along with the pause around it. Every cut shows in the transcript first, so you decide what goes.","preset":"fillers","crumb":"Remove filler words","nav":"remove-filler-words/","dropTitle":"Drop a video to find the ums","howto":{"name":"How to remove filler words from a video","steps":["Open the editor and choose your video.","Wait while the speech model transcribes it; filler words are underlined and crossed out.","Tap any filler you want to keep, or any other word you want to cut.","Export the video and download it."]}}-->
+<section class="band prose">
+  <h2>What counts as a filler word</h2>
+  <p>Only hesitation sounds that never carry meaning: <b>um, uh, er, erm, ah, hmm</b> and their stretched versions (“ummm”). In other languages it looks for the local equivalents, such as “äh” and “ähm” in German or “euh” in French.</p>
+  <p>Words like “like”, “so”, “basically” and “you know” are left alone, because they're often part of what you mean. If one of them is a habit you want gone, select it in the transcript and cut it yourself; Shift-tap or drag to select several words at once.</p>
+
+  <h2>Why fillers are hard to catch, and how this editor does it</h2>
+  <p>Speech models are trained mostly on tidy transcripts, so they tend to leave fillers out. This editor nudges the model to write them down, then checks the audio: any sound that the model didn't turn into words is shown as a ♪ chip. Those are usually breaths, clicks or a mumbled “um”. Tick “Cut sounds with no words” to remove them all, or tap them one by one.</p>
+
+  <h2>Cuts that don't sound cut</h2>
+  <ul>
+    <li>A filler and the pause around it are removed together, leaving one natural gap.</li>
+    <li>When a filler runs straight into the next word, the cut is placed at the quietest moment between them.</li>
+    <li>The sound fades for a few milliseconds at every cut, so there are no clicks.</li>
+    <li>Punch-in zoom (Format tab) alternates the framing at each cut, the trick editors use to hide jump cuts.</li>
+  </ul>
+</section>
+<section class="band">
+  <h2>Questions</h2>
+  <details><summary>Will it remove a filler in the middle of a sentence?</summary><p>Yes. If you say “and, uh, then”, the “uh” and the gap around it are cut, leaving “and then” with a short natural pause.</p></details>
+  <details><summary>What if it cuts something I meant to say?</summary><p>Tap the crossed-out word to keep it, or press Undo. Nothing is final until you export, and you can go back to the edit after exporting.</p></details>
+  <details><summary>Is this the same as noise removal?</summary><p>No. It removes whole moments of the recording; it doesn't clean up background noise in the parts that stay.</p></details>
+</section>
+<section class="band"><h2>Guides</h2>{{guides}}</section>

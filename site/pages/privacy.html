@@ -1,0 +1,34 @@
+<!--{"path":"/privacy/","title":"Privacy: your video never leaves your device · Symbaiosis","description":"How Symbaiosis edits video without uploading it: everything runs in your browser, the speech model is downloaded once, and the page's security policy blocks sending data to other sites.","priority":0.5,"nav":"privacy/"}-->
+<article class="prose">
+  <p class="crumbs"><a href="{{root}}">Symbaiosis</a> › Privacy</p>
+  <h1>Your video never leaves your device</h1>
+  <p class="lede">Symbaiosis is a set of static files. It has no server that could receive your video, and it doesn't need one: your browser does all the work.</p>
+
+  <h2>What happens when you edit</h2>
+  <ul>
+    <li><b>Your video</b> is read from your disk by your browser. It isn't uploaded, copied to a server or stored anywhere after you close the tab.</li>
+    <li><b>The sound</b> is decoded and analysed in your browser to find pauses.</li>
+    <li><b>The speech model</b> (Whisper by OpenAI, 43 MB for English or 80 MB for other languages) is downloaded from this site once, stored in your browser's cache, and runs on your device. Your audio goes into it locally; nothing comes back from anywhere.</li>
+    <li><b>The finished video</b> is encoded by your browser and saved by you, wherever you choose.</li>
+  </ul>
+
+  <h2>How you can check</h2>
+  <ul>
+    <li>Every page carries a Content Security Policy that lets it connect only to this site{{counterNote}}. A browser enforces that policy; the page couldn't send your video elsewhere even if its code tried.</li>
+    <li>Open your browser's developer tools, go to the Network tab and edit a video: you'll see the page's own files and the model files load, and nothing else.</li>
+    <li>Once the model is cached, you can turn off your internet connection and the editor keeps working.</li>
+    <li>The source code is public: <a href="https://github.com/theguysaccount/symbaiosis-ai-video-editor">github.com/theguysaccount/symbaiosis-ai-video-editor</a>.</li>
+  </ul>
+
+  <h2>Counting visits</h2>
+  <p>{{counterPolicy}}</p>
+
+  <h2>Cookies and storage</h2>
+  <p>No cookies. Your browser's cache keeps the speech model so it isn't downloaded again; clear this site's data in your browser settings to remove it. Nothing about your videos is stored.</p>
+
+  <h2>Hosting</h2>
+  <p>The site is served by GitHub Pages. Like any web host, GitHub receives the usual request information (your IP address and browser) when you load the pages; see GitHub's privacy statement. Your video isn't part of any request.</p>
+
+  <h2>Contact</h2>
+  <p>Questions or problems: open an issue at <a href="https://github.com/theguysaccount/symbaiosis-ai-video-editor/issues">the project's GitHub page</a>.</p>
+</article>

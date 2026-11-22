@@ -1,0 +1,126 @@
+# Build the site, test it (unit tests, build tests and a headless-Chrome run of the real editor on
+# the sample clip), deploy it to GitHub Pages, confirm the new build is the one being served, and
+# tell IndexNow. Runs on every push to main, twice a week (so guides whose date has come go live),
+# and by hand. Fails safe: if any test fails nothing is deployed and the last good version stays
+# live. Safe to re-run at any time: a run only ever rebuilds from main.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 6 * * 1"
+    - cron: "41 6 * * 4"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # The site's address is this one setting. SITE_URL (repository variable) switches it to a custom
+  # domain; when it's empty the GitHub Pages address is used. See OPERATIONS.md, key 1.
+  BASE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+  GOATCOUNTER_URL: ${{ vars.GOATCOUNTER_URL }}
+  SUPPORT_URL: ${{ vars.SUPPORT_URL }}
+  PRO_URL: ${{ vars.PRO_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Make sure Chrome is installed
+        run: |
+          if [ -x /usr/bin/google-chrome ]; then
+            echo "CHROME=/usr/bin/google-chrome" >> "$GITHUB_ENV"
+          else
+            npx --yes @puppeteer/browsers install chrome@stable --path "$RUNNER_TEMP/chrome" | tee "$RUNNER_TEMP/chrome.txt"
+            echo "CHROME=$(tail -1 "$RUNNER_TEMP/chrome.txt" | cut -d' ' -f2-)" >> "$GITHUB_ENV"
+          fi
+      - run: npm ci --no-audit --no-fund
+      - name: Unit and build tests
+        run: npm test
+      - name: Build
+        run: node scripts/build.mjs
+      - name: End-to-end self-test of the built site in headless Chrome
+        run: node scripts/selftest.mjs --report selftest-report.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: selftest-report
+          path: selftest-report.json
+          retention-days: 30
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: urls
+          path: dist-urls.txt
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.second.outputs.page_url || steps.first.outputs.page_url }}
+    steps:
+      - id: first
+        uses: actions/deploy-pages@v5
+        continue-on-error: true
+      # Pages sometimes stalls while syncing files; offer the same build once more before giving up.
+      - id: second
+        if: steps.first.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+
+  live:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Wait until the new build is the one being served
+        run: |
+          for i in $(seq 1 30); do
+            served=$(curl -fsS "$BASE_URL/build.json?$RANDOM" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).commit)}catch{console.log("")}})') || served=""
+            if [ "$served" = "$GITHUB_SHA" ]; then echo "live: $served"; exit 0; fi
+            echo "serving ${served:-nothing yet}; waiting for $GITHUB_SHA"; sleep 20
+          done
+          echo "::error::The deployed build did not appear at $BASE_URL within 10 minutes."; exit 1
+      - run: npm ci --no-audit --no-fund
+      - name: Check every live page
+        run: |
+          if [ -x /usr/bin/google-chrome ]; then export CHROME=/usr/bin/google-chrome; else npx --yes @puppeteer/browsers install chrome@stable --path "$RUNNER_TEMP/chrome" | tee "$RUNNER_TEMP/chrome.txt"; export CHROME="$(tail -1 "$RUNNER_TEMP/chrome.txt" | cut -d' ' -f2-)"; fi
+          node scripts/selftest.mjs --url "$BASE_URL/" --only pages
+      - uses: actions/download-artifact@v8
+        with:
+          name: urls
+      - name: Submit the pages to IndexNow (never fails the run)
+        run: node scripts/indexnow.mjs dist-urls.txt || true
+
+  keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Keep scheduled workflows enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/keepalive.sh

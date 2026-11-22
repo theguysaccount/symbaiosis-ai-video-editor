@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-urls.txt
+selftest-report.json
+report.json
+.env
+.env.*
+!.env.example
+.DS_Store
+.claude/
+*.log

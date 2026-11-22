@@ -1,0 +1,27 @@
+<!--{"path":"/how-it-works/","title":"How it works: AI video editing inside the browser · Symbaiosis","description":"The technology behind Symbaiosis: WebCodecs decoding and encoding, loudness-based silence detection, Whisper speech recognition on WebAssembly, word alignment, and why it runs single-threaded on GitHub Pages.","priority":0.5,"nav":"how-it-works/"}-->
+<article class="prose">
+  <p class="crumbs"><a href="{{root}}">Symbaiosis</a> › How it works</p>
+  <h1>How an AI video editor runs inside a web page</h1>
+  <p class="lede">Five steps, all on your device: read the file, find the pauses, transcribe, line the words up with the sound, and render the edit.</p>
+
+  <h2>1. Reading the video</h2>
+  <p>The file is opened with <a href="https://mediabunny.dev/">Mediabunny</a>, an open-source library that reads MP4, MOV, WebM and other containers directly from disk. The picture and sound are decoded by your browser's built-in WebCodecs decoders, the same hardware-accelerated ones it uses to play video.</p>
+
+  <h2>2. Finding the pauses</h2>
+  <p>The sound is mixed to mono and resampled to 16,000 samples a second. Loudness is measured every 10 ms over a 25 ms window, after filtering out rumble below 110 Hz. A histogram of those loudness values shows the recording's own background-noise level; anything within 8 dB of it is quiet. Quiet stretches longer than your pacing setting become pauses to shorten. This step takes about a second for a few minutes of audio.</p>
+
+  <h2>3. Transcribing on your device</h2>
+  <p>The speech is cut into pieces of up to 28 seconds at natural pauses, skipping silence, and each piece goes to <a href="https://github.com/openai/whisper">Whisper</a>, OpenAI's open speech-recognition model, running through <a href="https://huggingface.co/docs/transformers.js">Transformers.js</a> and ONNX Runtime Web compiled to WebAssembly. English uses Whisper tiny.en; other languages use Whisper base. Both are 8-bit versions served from this site. A short prompt of hesitation sounds encourages the model to write down the “um”s and “uh”s that it would normally tidy away.</p>
+
+  <h2>4. Lining words up with the sound</h2>
+  <p>Whisper times each word from its attention patterns, which is accurate inside a sentence but drifts around pauses: a word after a pause often “starts” in the silence. So every word is assigned to the stretch of sound it belongs to, and the words in each stretch are laid out inside its true start and end. Sounds the model wrote no word for are shown separately, as ♪ chips you can cut.</p>
+
+  <h2>5. Rendering the edit</h2>
+  <p>The kept parts of the video are decoded frame by frame, drawn onto a canvas in the shape you chose, with the caption for that moment drawn on top, and encoded by your browser's WebCodecs encoder as H.264 (or VP9 where H.264 isn't available). The sound of each kept part is copied with a 6 ms fade at each edge and encoded as AAC; browsers without a built-in AAC encoder get a WebAssembly one, also served from this site. Mediabunny writes the finished MP4.</p>
+
+  <h2>Why it's single-threaded</h2>
+  <p>WebAssembly code can only use several CPU cores when a page is “cross-origin isolated”, which requires two HTTP headers that GitHub Pages doesn't let sites send. Rather than work around that with a service worker that rewrites responses and reloads the page, Symbaiosis runs the speech model on one core in a background worker. The small English model still transcribes faster than real time on a recent laptop. If the site is ever served with those headers, it uses up to four cores automatically.</p>
+
+  <h2>Open source</h2>
+  <p>The editor's code is MIT-licensed. The libraries it uses keep their own licences: Mediabunny (MPL-2.0), Transformers.js (Apache-2.0), ONNX Runtime (MIT), Whisper (MIT), the FFmpeg AAC encoder (LGPL-2.1) and the Montserrat font (OFL-1.1). Details are in <a href="https://github.com/theguysaccount/symbaiosis-ai-video-editor/blob/main/site/assets/vendor/NOTICE.md">NOTICE.md</a>.</p>
+</article>

@@ -1,0 +1,39 @@
+<!--{"path":"/","title":"Remove pauses and ums, add captions, export vertical · Symbaiosis","description":"Free AI video editor that runs in your browser: it cuts silences and filler words, writes word-by-word captions with an on-device speech model, and exports vertical MP4. No upload, no watermark, no account.","h1":"Cut the pauses and ums. Add captions. Export vertical.","lede":"Drop in a talking video. A speech model running on your own device finds the dead air and the filler words, writes word-by-word captions, and exports a vertical MP4 for Shorts, Reels and TikTok. You review every cut. Your video never leaves your device.","preset":"default","priority":1.0,"nav":"","appName":"Symbaiosis video editor"}-->
+<section class="band">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Drop a video.</b> MP4, MOV or WebM from your phone, camera or screen recorder. The file is read from your disk, not sent anywhere.</li>
+    <li><b>It listens.</b> Silence detection marks every pause in about a second. Then Whisper, OpenAI's speech model, transcribes the speech on your device and marks filler words like “um” and “uh”.</li>
+    <li><b>You direct.</b> Crossed-out words and pauses will be cut. Tap any word to cut or keep it, fix a mistranscribed word, choose a caption style and a shape.</li>
+    <li><b>Export.</b> Your browser renders an MP4 with the cuts, burned-in captions and the shape you chose, plus SRT and VTT caption files.</li>
+  </ol>
+</section>
+
+<section class="band prose">
+  <h2>What it's good at, and what it isn't</h2>
+  <p><b>Good at:</b> talking-head clips, vlogs, explainers, podcasts clips, tutorials and screen recordings with narration, up to about 20 minutes. The silence cutter works in any language; captions and filler detection cover English (fastest) and 18 other languages.</p>
+  <p><b>Not for:</b> music videos, multi-camera edits or effects-heavy projects. There's no timeline of clips, no transitions and no stock footage: this tool does the tedious part of a short-form edit, quickly, and leaves the creative part to you or your main editor.</p>
+  <p>The AI makes the first cut; you make the final call. Nothing is cut that you can't see crossed out in the transcript first.</p>
+</section>
+
+<section class="band prose">
+  <h2>Privacy you can check</h2>
+  <p>Most “free” online editors upload your footage to their servers. This one can't: the page is static files on GitHub Pages, the speech model is downloaded to your browser once (43 MB for English) and then runs locally, and the page's security policy forbids it from sending data to any other site{{counterNote}}. Open your browser's network panel while you edit and you'll see only this site's own files being loaded. <a href="{{root}}privacy/">Read the privacy page</a> or <a href="https://github.com/theguysaccount/symbaiosis-ai-video-editor">check the source code</a>.</p>
+</section>
+
+<section class="band">
+  <h2>Questions</h2>
+  <details><summary>Is it really free? What's the catch?</summary><p>It's free because it costs almost nothing to run: your device does the work, and the site is static files. There's no account, no watermark, and no limit on the number of videos. The code is open source under the MIT licence.</p></details>
+  <details><summary>Does my video get uploaded?</summary><p>No. The video is read straight from your disk by your browser. The transcription model runs in your browser too. Nothing about the video, its sound or its words is sent to any server, and nothing is kept after you close the tab.</p></details>
+  <details><summary>How long can my video be?</summary><p>Up to an hour is accepted, but it's built for short-form: clips under 20 minutes work best. The finished video is assembled in your device's memory, so very long or very high-resolution exports may fail on phones; choose 720p if that happens.</p></details>
+  <details><summary>How accurate are the captions?</summary><p>For clear speech in English, the on-device model gets most words right, but it does make mistakes with names, jargon and accents. Tap a word, then “Fix text”, to correct it before you export. Captions follow the words as they are spoken, one highlighted word at a time.</p></details>
+  <details><summary>Will cutting pauses make my video look choppy?</summary><p>Each cut leaves a short natural pause (you choose tight, natural or relaxed pacing), cut points are placed in the quietest moment, and the sound fades over a few milliseconds so there are no clicks. Turn on punch-in zoom in the Format tab to hide jump cuts the way professional editors do.</p></details>
+  <details><summary>Does it work on my phone?</summary><p>It works in Chrome on Android and in Safari on iPhone (iOS 26 or later), as long as the phone has enough memory for the video. Transcription on a phone is slower than on a laptop. Tested in Chrome on desktop and on phone-sized screens.</p></details>
+  <details><summary>Which languages can it caption?</summary><p>English uses a small, fast English-only model. Spanish, French, German, Portuguese, Italian, Dutch, Polish, Turkish, Russian, Ukrainian, Swedish, Indonesian, Vietnamese, Hindi, Japanese, Korean, Chinese and Arabic use a larger multilingual model (80 MB, downloaded once). Pause cutting works for any language.</p></details>
+  <details><summary>Can I get the captions as a file?</summary><p>Yes. Every export also gives you SRT and VTT files timed to the edited video, and you can copy the transcript as text.</p></details>
+</section>
+
+<section class="band">
+  <h2>Guides</h2>
+  {{guides}}
+</section>

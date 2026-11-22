@@ -1,0 +1,14 @@
+{
+  "name": "Symbaiosis video editor",
+  "short_name": "Symbaiosis",
+  "description": "Cut pauses and filler words, add captions and export vertical video, in your browser.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f6fb",
+  "theme_color": "#5b3df5",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
